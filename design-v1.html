@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Design V1 · Radar Inmersión Dominando los Alineadores</title>
+  <style>
+    :root{
+      --bg:#07040d;
+      --panel:#12091f;
+      --panel2:#1a0f2a;
+      --ink:#fff8ee;
+      --muted:#b8a8c7;
+      --muted2:#7f6b91;
+      --gold:#f7c56b;
+      --gold2:#ffdf9a;
+      --lilac:#a678ff;
+      --violet:#6f42ff;
+      --cyan:#66e7ff;
+      --green:#50f0a8;
+      --red:#ff5d7d;
+      --line:rgba(255,255,255,.10);
+      --glass:rgba(255,255,255,.065);
+      --shadow:0 28px 90px rgba(0,0,0,.45);
+      --radius:28px;
+    }
+    *{box-sizing:border-box}
+    html{background:radial-gradient(circle at 20% -10%,rgba(166,120,255,.28),transparent 34%),radial-gradient(circle at 86% 8%,rgba(247,197,107,.20),transparent 26%),radial-gradient(circle at 70% 115%,rgba(102,231,255,.12),transparent 34%),var(--bg); color:var(--ink); min-height:100%}
+    body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;letter-spacing:-.02em;min-height:100vh;overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:52px 52px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),rgba(0,0,0,.1));pointer-events:none}
+    .wrap{width:min(1540px,calc(100vw - 32px));margin:22px auto 40px;position:relative}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:18px}
+    .brand{display:flex;align-items:center;gap:16px;min-width:0}
+    .mark{width:64px;height:64px;border-radius:22px;background:linear-gradient(135deg,rgba(247,197,107,.28),rgba(166,120,255,.22));border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;box-shadow:0 16px 50px rgba(111,66,255,.20)}
+    .mark b{font-size:18px;color:var(--gold);letter-spacing:.08em}
+    .eyebrow{color:var(--gold);font-weight:900;font-size:12px;letter-spacing:.20em;text-transform:uppercase;margin-bottom:6px}
+    h1{font-size:42px;line-height:.98;margin:0;font-weight:950;letter-spacing:-.055em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sub{margin:9px 0 0;color:var(--muted);font-size:14px;font-weight:700;letter-spacing:-.01em}
+    .actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .pill,.btn{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.065);backdrop-filter:blur(18px);border-radius:999px;padding:11px 14px;color:var(--ink);font-weight:850;font-size:13px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 28px rgba(0,0,0,.18)}
+    .pill.good{color:#dfffea;border-color:rgba(80,240,168,.36);background:rgba(80,240,168,.10)}
+    .btn{cursor:pointer;background:linear-gradient(135deg,var(--gold),#ff9f43);color:#1a0f09;border:0;padding:12px 18px;box-shadow:0 14px 42px rgba(247,197,107,.22)}
+    .btn.secondary{background:rgba(255,255,255,.07);color:var(--ink);border:1px solid rgba(255,255,255,.13);box-shadow:none}
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-bottom:18px}
+    .panel{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.085),rgba(255,255,255,.042));border:1px solid rgba(255,255,255,.13);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .panel:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 0%,rgba(247,197,107,.13),transparent 32%),radial-gradient(circle at 100% 12%,rgba(166,120,255,.14),transparent 36%);pointer-events:none}
+    .panelInner{position:relative;padding:22px}
+    .headline{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:start;margin-bottom:16px}
+    .headline h2{font-size:24px;margin:0;font-weight:950;letter-spacing:-.04em}
+    .statusDot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 22px var(--green)}
+    .confidence{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+    .mini{background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:12px}
+    .mini span{display:block;color:var(--muted2);font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:900;margin-bottom:5px}
+    .mini b{font-size:17px}.mini.ok b{color:var(--green)}.mini.warn b{color:var(--gold)}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .kpi{min-height:138px;border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.045));border:1px solid rgba(255,255,255,.12);padding:16px;position:relative;overflow:hidden}
+    .kpi:after{content:"";position:absolute;right:-42px;top:-46px;width:120px;height:120px;background:radial-gradient(circle,rgba(247,197,107,.18),transparent 68%)}
+    .kpi .label{font-size:12px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.11em}
+    .kpi .value{font-size:34px;font-weight:950;letter-spacing:-.055em;margin:14px 0 6px}
+    .kpi .note{font-size:13px;color:var(--muted);font-weight:750}.kpi.green .value{color:var(--green)}.kpi.red .value{color:var(--red)}.kpi.gold .value{color:var(--gold2)}
+    .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:start}
+    .sectionTitle{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+    .sectionTitle h3{margin:0;font-size:18px;font-weight:950;letter-spacing:-.035em}.sectionTitle small{color:var(--muted2);font-weight:850}
+    .chart{height:310px;display:flex;align-items:end;gap:11px;padding:22px 8px 8px;border-radius:22px;background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.20));border:1px solid rgba(255,255,255,.07)}
+    .bar{flex:1;min-width:0;height:var(--h);border-radius:16px 16px 8px 8px;background:linear-gradient(180deg,var(--gold2),#c7772c);position:relative;box-shadow:0 10px 30px rgba(247,197,107,.13)}
+    .bar:nth-child(even){background:linear-gradient(180deg,var(--lilac),var(--violet));box-shadow:0 10px 30px rgba(111,66,255,.16)}
+    .bar b{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:12px}.bar span{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--muted);font-weight:850;white-space:nowrap}
+    .table{width:100%;border-collapse:separate;border-spacing:0 8px}.table th{font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:.12em;text-align:right;padding:0 10px 4px}.table th:first-child,.table td:first-child{text-align:left}.table td{background:rgba(255,255,255,.065);border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);padding:12px 10px;text-align:right;font-weight:850}.table td:first-child{border-left:1px solid rgba(255,255,255,.08);border-radius:16px 0 0 16px}.table td:last-child{border-right:1px solid rgba(255,255,255,.08);border-radius:0 16px 16px 0}.table small{display:block;color:var(--muted2);font-weight:750;margin-top:3px}
+    .creativeGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.creative{border-radius:24px;background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.10);overflow:hidden}.thumb{height:126px;background:linear-gradient(135deg,#2b1743,#100719);display:grid;place-items:center;color:rgba(255,255,255,.42);font-weight:950}.creativeInfo{padding:13px}.rank{color:var(--gold);font-size:12px;font-weight:950;letter-spacing:.12em}.creativeName{font-weight:950;margin:6px 0 8px;font-size:14px;line-height:1.05}.sales{font-size:24px;font-weight:950}.sales small{font-size:12px;color:var(--muted);font-weight:800}
+    .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.step{border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);padding:14px}.step b{display:block;font-size:14px}.step span{display:block;margin-top:5px;color:var(--muted);font-size:12px;font-weight:750}.step.ok{border-color:rgba(80,240,168,.30)}.step.live{border-color:rgba(247,197,107,.36);background:rgba(247,197,107,.08)}
+    .footer{display:flex;justify-content:space-between;align-items:center;color:var(--muted2);font-size:12px;font-weight:800;margin-top:14px;padding:0 4px}.watermark{color:var(--gold);letter-spacing:.16em;text-transform:uppercase}
+    .toast{position:fixed;right:18px;bottom:18px;background:#12091f;border:1px solid rgba(247,197,107,.28);color:var(--ink);padding:14px 16px;border-radius:18px;box-shadow:var(--shadow);font-weight:850;opacity:0;transform:translateY(10px);transition:.22s;z-index:30}.toast.show{opacity:1;transform:translateY(0)}
+    @media(max-width:1100px){.hero,.grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}h1{white-space:normal}.confidence,.timeline{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:680px){.wrap{width:calc(100vw - 18px);margin-top:10px}.topbar{align-items:flex-start;flex-direction:column}.actions{justify-content:flex-start}.kpis,.confidence,.creativeGrid,.timeline{grid-template-columns:1fr}.chart{height:250px}.table{font-size:12px}.table th:nth-child(3),.table td:nth-child(3),.table th:nth-child(5),.table td:nth-child(5){display:none}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark"><b>IDA</b></div>
+        <div>
+          <div class="eyebrow">XDental · Dashboard de Ingressos</div>
+          <h1>Inmersión Dominando los Alineadores</h1>
+          <p class="sub">Protótipo visual V1 · dados ilustrativos para fechar design antes da conexão Hotmart + Meta</p>
+        </div>
+      </div>
+      <div class="actions">
+        <span class="pill good"><span class="statusDot"></span> Design preview</span>
+        <span class="pill">Última coleta: 17:40 BRT</span>
+        <button class="btn" id="refreshBtn">Atualizar agora</button>
+        <button class="btn secondary" id="compactBtn">Modo compacto</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="panel">
+        <div class="panelInner">
+          <div class="headline">
+            <div>
+              <h2>Command Center da campanha</h2>
+              <p class="sub">Visão executiva para decidir escala, cortes de campanha, páginas vencedoras e confiabilidade dos dados.</p>
+            </div>
+            <span class="pill good">Dados confiáveis quando conectado</span>
+          </div>
+          <div class="kpis">
+            <div class="kpi gold"><div class="label">Ingressos vendidos</div><div class="value">426</div><div class="note">+63 hoje · meta 2.000</div></div>
+            <div class="kpi"><div class="label">Receita total</div><div class="value">US$ 3.840</div><div class="note">ingresso + bumps</div></div>
+            <div class="kpi red"><div class="label">Lucro / prejuízo</div><div class="value">-US$ 1.285</div><div class="note">dentro do limite operacional</div></div>
+            <div class="kpi green"><div class="label">Ritmo projetado</div><div class="value">1.742</div><div class="note">participantes até o evento</div></div>
+          </div>
+          <div class="confidence">
+            <div class="mini ok"><span>Hotmart</span><b>OK · 426 vendas</b></div>
+            <div class="mini ok"><span>Meta Ads</span><b>OK · 18 campanhas</b></div>
+            <div class="mini warn"><span>Auditoria</span><b>2 alertas leves</b></div>
+            <div class="mini"><span>Snapshot</span><b>v2026.07.08</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panelInner">
+          <div class="sectionTitle"><h3>Funil acumulado</h3><small>Meta → Hotmart</small></div>
+          <table class="table">
+            <thead><tr><th>Etapa</th><th>Total</th><th>Conv.</th></tr></thead>
+            <tbody>
+              <tr><td>Cliques link<small>Meta inline link</small></td><td>18.420</td><td>—</td></tr>
+              <tr><td>LPV<small>connect rate</small></td><td>10.924</td><td>59,3%</td></tr>
+              <tr><td>Checkout<small>LPV → checkout</small></td><td>1.148</td><td>10,5%</td></tr>
+              <tr><td>Vendas Hotmart<small>aprovadas</small></td><td>426</td><td>39,1%</td></tr>
+            </tbody>
+          </table>
+          <div class="timeline" style="margin-top:14px">
+            <div class="step ok"><b>08h</b><span>cron manhã</span></div>
+            <div class="step ok"><b>12h</b><span>cron meio-dia</span></div>
+            <div class="step live"><b>16h</b><span>cron tarde</span></div>
+            <div class="step"><b>20h</b><span>fechamento</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="panelInner">
+          <div class="sectionTitle"><h3>Participantes por dia</h3><small>produto principal · Hotmart</small></div>
+          <div class="chart" aria-label="gráfico de participantes por dia">
+            <div class="bar" style="--h:34%"><b>31</b><span>04/07</span></div>
+            <div class="bar" style="--h:42%"><b>39</b><span>05/07</span></div>
+            <div class="bar" style="--h:63%"><b>58</b><span>06/07</span></div>
+            <div class="bar" style="--h:88%"><b>82</b><span>07/07</span></div>
+            <div class="bar" style="--h:68%"><b>63</b><span>08/07</span></div>
+            <div class="bar" style="--h:76%"><b>71</b><span>09/07</span></div>
+            <div class="bar" style="--h:92%"><b>86</b><span>10/07</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panelInner">
+          <div class="sectionTitle"><h3>Páginas vencedoras</h3><small>P1–P4 · tráfego + venda</small></div>
+          <table class="table">
+            <thead><tr><th>Página</th><th>Gasto</th><th>Vendas</th><th>CAC</th><th>Connect</th></tr></thead>
+            <tbody>
+              <tr><td>P2<small>/imersion-alineadores-b</small></td><td>US$ 1.420</td><td>154</td><td>US$ 9,22</td><td>64,1%</td></tr>
+              <tr><td>P4<small>/imersion-alineadores-d</small></td><td>US$ 1.108</td><td>121</td><td>US$ 9,15</td><td>61,7%</td></tr>
+              <tr><td>P1<small>/imersion-alineadores-a</small></td><td>US$ 1.332</td><td>97</td><td>US$ 13,73</td><td>55,0%</td></tr>
+              <tr><td>P3<small>/imersion-alineadores-c</small></td><td>US$ 978</td><td>54</td><td>US$ 18,11</td><td>48,4%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panelInner">
+          <div class="sectionTitle"><h3>Top criativos por venda real</h3><small>Hotmart tracking · não pixel</small></div>
+          <div class="creativeGrid">
+            <article class="creative"><div class="thumb">thumbnail criativo</div><div class="creativeInfo"><div class="rank">#1</div><div class="creativeName">Benefício invisível dos alinhadores</div><div class="sales">84 <small>vendas</small></div></div></article>
+            <article class="creative"><div class="thumb">thumbnail criativo</div><div class="creativeInfo"><div class="rank">#2</div><div class="creativeName">Caso clínico rápido · antes/depois</div><div class="sales">67 <small>vendas</small></div></div></article>
+            <article class="creative"><div class="thumb">thumbnail criativo</div><div class="creativeInfo"><div class="rank">#3</div><div class="creativeName">Erro comum no planejamento</div><div class="sales">49 <small>vendas</small></div></div></article>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panelInner">
+          <div class="sectionTitle"><h3>Leitura TAOS</h3><small>bloco executivo</small></div>
+          <table class="table">
+            <tbody>
+              <tr><td>Diagnóstico<small>o gargalo hoje não é página; é volume com CAC controlado.</small></td><td>Escalar P2/P4</td></tr>
+              <tr><td>Próxima ação<small>subir verba nos criativos #1 e #2 mantendo limite de CAC.</small></td><td>Prioridade alta</td></tr>
+              <tr><td>Risco<small>se P3 continuar abaixo do connect mínimo, cortar ou trocar promessa.</small></td><td>Monitorar</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>Preview de design. Na versão final: Hotmart + Meta live, snapshot JSON, logs de coleta, crons e botão manual protegido.</span>
+      <span class="watermark">TAOS · XDENTAL</span>
+    </footer>
+  </main>
+  <div class="toast" id="toast">Na V1 visual, o botão só simula. Na versão final ele dispara atualização real protegida.</div>
+  <script>
+    const toast = document.getElementById('toast');
+    document.getElementById('refreshBtn').addEventListener('click',()=>{
+      toast.classList.add('show');
+      setTimeout(()=>toast.classList.remove('show'),3600);
+    });
+    document.getElementById('compactBtn').addEventListener('click',()=>{
+      document.body.classList.toggle('compact');
+      document.querySelectorAll('.sub').forEach(el=>el.style.display=document.body.classList.contains('compact')?'none':'');
+    });
+  </script>
+</body>
+</html>
