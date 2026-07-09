@@ -147,7 +147,8 @@ function selectIso(iso){const found=days.find(x=>x.iso===iso)||days.at(-1);docum
     if(!res.ok)throw new Error('HTTP '+res.status);
     const html=await res.text();
     const m=html.match(/const days=(\[.*?\]);\nconst fmtUSD/s);
-    const nextDays=m?m[1]:'';
+    let nextDays='';
+    try{nextDays=m?JSON.stringify(JSON.parse(m[1])):'';}catch(_){nextDays='';}
     if(nextDays&&nextDays!==currentDays){
       t.textContent='Versão nova encontrada. Atualizando tela...';
       document.open();document.write(html);document.close();
