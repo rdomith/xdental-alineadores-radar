@@ -2,4 +2,4 @@
 
 Dashboard público standalone da venda de ingressos da Inmersión Dominando los Alineadores.
 
-Fonte: Hotmart + Meta Ads + SendFlow.
+Fonte: Hotmart + Meta Ads + SendFlow + Google Sheets.
